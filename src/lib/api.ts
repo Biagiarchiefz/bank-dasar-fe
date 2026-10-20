@@ -1,5 +1,8 @@
-// Fetch wrapper for the backend API (envelope: {"data"} / {"error"}).
-// Phase 1 adds apiPost/apiPut and the 401 → /login redirect.
+// Fetch wrapper for the Go API. Paths are relative ("/api/v1/...") and are
+// proxied to the backend by the rewrite in next.config.ts, so the session
+// cookie stays same-origin and no CORS is needed.
+
+import type { Paged } from "./types";
 
 export type ApiErrorBody = {
   code: string;
@@ -8,6 +11,7 @@ export type ApiErrorBody = {
   fields?: Record<string, string>;
 };
 
+/** Error returned by the API (or a network failure, status 0). */
 export class ApiError extends Error {
   readonly status: number;
   readonly code: string;
@@ -24,21 +28,71 @@ export class ApiError extends Error {
   }
 }
 
-/** GET a relative API path such as "/api/v1/health" and return its `data`. */
-export async function apiGet<T>(path: string, init?: RequestInit): Promise<T> {
+type Query = Record<string, string | number | boolean | null | undefined>;
+
+/** Builds "path?a=1&b=2", skipping empty values. */
+export function withQuery(path: string, query?: Query): string {
+  if (!query) return path;
+  const params = new URLSearchParams();
+  for (const [key, value] of Object.entries(query)) {
+    if (value === undefined || value === null || value === "") continue;
+    params.set(key, String(value));
+  }
+  const qs = params.toString();
+  return qs ? `${path}?${qs}` : path;
+}
+
+async function request(method: string, path: string, body?: unknown): Promise<unknown> {
   let res: Response;
   try {
-    res = await fetch(path, { ...init, headers: { Accept: "application/json", ...init?.headers } });
+    res = await fetch(path, {
+      method,
+      headers: body === undefined ? { Accept: "application/json" } : { Accept: "application/json", "Content-Type": "application/json" },
+      body: body === undefined ? undefined : JSON.stringify(body),
+      cache: "no-store",
+      credentials: "same-origin",
+    });
   } catch {
     throw new ApiError(0, { code: "NETWORK_ERROR", message: "Tidak dapat terhubung ke server." });
   }
 
-  const json = await res.json().catch(() => null);
+  if (res.status === 204) return null;
+  const json = (await res.json().catch(() => null)) as { data?: unknown; error?: ApiErrorBody } | null;
+
   if (!res.ok) {
-    throw new ApiError(
+    const err = new ApiError(
       res.status,
       json?.error ?? { code: "UNKNOWN_ERROR", message: `Server mengembalikan status ${res.status}.` },
     );
+    // Session expired: send the user back to the login page (except for the login call itself).
+    if (res.status === 401 && typeof window !== "undefined" && !path.startsWith("/api/v1/auth/login")) {
+      const next = encodeURIComponent(window.location.pathname + window.location.search);
+      // A full page load (not router.push) on purpose: it drops all cached client state.
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+      window.location.href = `/login?next=${next}`;
+    }
+    throw err;
   }
-  return json.data as T;
+  return json;
+}
+
+/** GET returning `data`. */
+export async function apiGet<T>(path: string, query?: Query): Promise<T> {
+  const json = (await request("GET", withQuery(path, query))) as { data: T };
+  return json.data;
+}
+
+/** GET a paginated list, returning `data` and `meta`. */
+export async function apiList<T>(path: string, query?: Query): Promise<Paged<T>> {
+  return (await request("GET", withQuery(path, query))) as Paged<T>;
+}
+
+export async function apiPost<T>(path: string, body?: unknown): Promise<T> {
+  const json = (await request("POST", path, body ?? {})) as { data: T } | null;
+  return json?.data as T;
+}
+
+export async function apiPut<T>(path: string, body: unknown): Promise<T> {
+  const json = (await request("PUT", path, body)) as { data: T };
+  return json.data;
 }
