@@ -64,14 +64,14 @@ export function DataTable<T extends RowData>({
   const rows = table.getRowModel().rows;
 
   return (
-    <div className="overflow-hidden rounded-lg border bg-card">
+    <div className="overflow-hidden rounded-3xl border border-border/80 bg-card shadow-soft">
       <div className="overflow-x-auto">
         <Table>
-          <TableHeader className="bg-muted/50">
+          <TableHeader className="bg-slate-50/80">
             {table.getHeaderGroups().map((group) => (
               <TableRow key={group.id} className="hover:bg-transparent">
                 {group.headers.map((header) => (
-                  <TableHead key={header.id} className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  <TableHead key={header.id} className="text-xs font-semibold tracking-wide text-slate-500 uppercase">
                     {header.isPlaceholder ? null : <table.FlexRender header={header} />}
                   </TableHead>
                 ))}
@@ -111,7 +111,7 @@ function Pagination({ meta, onPageChange }: { meta: PageMeta; onPageChange: (pag
   const from = (meta.page - 1) * meta.page_size + 1;
   const to = Math.min(meta.total, meta.page * meta.page_size);
   return (
-    <div className="flex items-center justify-between border-t px-4 py-2 text-sm text-muted-foreground">
+    <div className="flex items-center justify-between border-t px-5 py-3 text-sm text-muted-foreground">
       <span>
         {from}–{to} dari {meta.total}
       </span>

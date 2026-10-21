@@ -65,6 +65,15 @@ export function fmtCountdown(iso: string): string {
   return diffMs < 0 ? `lewat ${text}` : text;
 }
 
+/** Greeting for the WIB time of an instant: "Selamat pagi" / "siang" / "sore" / "malam". */
+export function greetingAt(iso: string): string {
+  const hour = Number(new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", hourCycle: "h23" }).format(new Date(iso)));
+  if (hour >= 4 && hour < 11) return "Selamat pagi";
+  if (hour >= 11 && hour < 15) return "Selamat siang";
+  if (hour >= 15 && hour < 18) return "Selamat sore";
+  return "Selamat malam";
+}
+
 /** Duration between two instants: "1 jam 25 menit". */
 export function fmtDuration(fromIso: string, toIso?: string | null): string {
   const ms = (toIso ? new Date(toIso).getTime() : Date.now()) - new Date(fromIso).getTime();

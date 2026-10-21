@@ -1,6 +1,5 @@
-import type { LucideIcon } from "lucide-react";
+import { ArrowUpRight, type LucideIcon } from "lucide-react";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -29,22 +28,36 @@ export function StatCard({
     success: "bg-emerald-100 text-emerald-700",
   };
   const body = (
-    <Card className={cn("gap-0 py-4", href && "transition-colors hover:border-primary/40")}>
-      <CardContent className="flex items-start justify-between gap-3 px-4">
-        <div className="min-w-0">
-          <p className="text-sm text-muted-foreground">{label}</p>
-          {loading ? (
-            <Skeleton className="mt-2 h-8 w-16" />
-          ) : (
-            <p className="mt-1 text-3xl font-bold tabular-nums tracking-tight">{value ?? "—"}</p>
-          )}
-          {hint && <p className="mt-1 text-xs text-muted-foreground">{hint}</p>}
-        </div>
-        <span className={cn("rounded-lg p-2", tones[tone])}>
+    <div
+      className={cn(
+        "group flex h-full flex-col gap-5 rounded-3xl border border-border/80 bg-card p-6 shadow-soft transition-all",
+        href && "hover:-translate-y-0.5 hover:border-primary/30 hover:shadow-xl hover:shadow-slate-200/50",
+      )}
+    >
+      <div className="flex items-center justify-between">
+        <span className={cn("flex size-10 items-center justify-center rounded-full", tones[tone])}>
           <Icon className="size-5" />
         </span>
-      </CardContent>
-    </Card>
+        {href && (
+          <ArrowUpRight className="size-4 text-muted-foreground transition-colors group-hover:text-primary" />
+        )}
+      </div>
+      <div className="min-w-0">
+        {loading ? (
+          <Skeleton className="h-9 w-16" />
+        ) : (
+          <p className="text-3xl font-extrabold tracking-[-0.03em] tabular-nums">{value ?? "—"}</p>
+        )}
+        <p className="mt-1 text-sm font-medium">{label}</p>
+        {hint && <p className="mt-0.5 text-xs text-muted-foreground">{hint}</p>}
+      </div>
+    </div>
   );
-  return href ? <Link href={href}>{body}</Link> : body;
+  return href ? (
+    <Link href={href} className="rounded-3xl focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:outline-none">
+      {body}
+    </Link>
+  ) : (
+    body
+  );
 }

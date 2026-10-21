@@ -1,14 +1,14 @@
 "use client";
 
 import { useQueryClient } from "@tanstack/react-query";
-import { Loader2, LogIn } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { ErrorAlert } from "@/components/shared/error-alert";
 import { Field } from "@/components/shared/field";
+import { PasswordInput } from "@/components/shared/password-input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { apiPost } from "@/lib/api";
 import { roleLabel } from "@/lib/format";
@@ -53,36 +53,46 @@ export function LoginForm() {
   const demo = process.env.NEXT_PUBLIC_DEMO_MODE === "true";
 
   return (
-    <div className="w-full max-w-md space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Masuk</CardTitle>
-          <CardDescription>Gunakan akun petugas Anda untuk melanjutkan.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4" onSubmit={form.handleSubmit((v) => login.mutate(v))} noValidate>
-            <Field label="Username" htmlFor="username" error={form.formState.errors.username?.message}>
-              <Input id="username" autoComplete="username" autoFocus {...form.register("username")} />
-            </Field>
-            <Field label="Password" htmlFor="password" error={form.formState.errors.password?.message}>
-              <Input id="password" type="password" autoComplete="current-password" {...form.register("password")} />
-            </Field>
-            {login.error && <ErrorAlert error={login.error} />}
-            <Button type="submit" className="w-full" disabled={login.isPending}>
-              {login.isPending ? <Loader2 className="animate-spin" /> : <LogIn />}
-              Masuk
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <div>
+      <h1 className="text-4xl leading-[1.05] font-extrabold tracking-[-0.04em] text-slate-900 sm:text-5xl">
+        Selamat datang <span className="font-serif font-normal tracking-normal italic">kembali</span>.
+      </h1>
+      <p className="mt-3 text-base text-slate-600">
+        Belum punya akun? Hubungi administrator unit Anda untuk dibuatkan akun beserta perannya.
+      </p>
+
+      <form className="mt-8 space-y-5" onSubmit={form.handleSubmit((v) => login.mutate(v))} noValidate>
+        <Field label="Username" htmlFor="username" error={form.formState.errors.username?.message}>
+          <Input
+            id="username"
+            autoComplete="username"
+            autoFocus
+            placeholder="Masukkan username"
+            className="h-12 border-slate-200 bg-white"
+            {...form.register("username")}
+          />
+        </Field>
+        <Field label="Password" htmlFor="password" error={form.formState.errors.password?.message}>
+          <PasswordInput
+            id="password"
+            autoComplete="current-password"
+            placeholder="Masukkan password"
+            className="h-12 border-slate-200 bg-white"
+            {...form.register("password")}
+          />
+        </Field>
+        {login.error && <ErrorAlert error={login.error} />}
+        <Button type="submit" size="lg" className="w-full" disabled={login.isPending}>
+          {login.isPending && <Loader2 className="animate-spin" />}
+          Masuk
+        </Button>
+      </form>
 
       {demo && (
-        <Card className="gap-3 py-4">
-          <CardHeader className="px-4">
-            <CardTitle className="text-sm">Akun demo</CardTitle>
-            <CardDescription>Klik untuk mengisi otomatis. Password semua akun: demo123</CardDescription>
-          </CardHeader>
-          <CardContent className="grid grid-cols-2 gap-2 px-4">
+        <div className="mt-10 border-t border-stone-200 pt-6">
+          <p className="text-sm font-semibold text-slate-900">Akun demo</p>
+          <p className="text-sm text-slate-600">Klik untuk mengisi otomatis. Password semua akun: demo123</p>
+          <div className="mt-4 grid grid-cols-2 gap-3">
             {demoAccounts.map((a) => (
               <button
                 key={a.username}
@@ -92,15 +102,15 @@ export function LoginForm() {
                   form.setValue("password", "demo123");
                   form.clearErrors();
                 }}
-                className="rounded-md border bg-background px-3 py-2 text-left text-sm transition-colors hover:border-primary/50 hover:bg-primary/5"
+                className="rounded-2xl bg-white px-4 py-3 text-left text-sm ring-1 ring-stone-200 transition-all hover:-translate-y-0.5 hover:shadow-lg hover:shadow-stone-200/60 hover:ring-primary/30 active:scale-[0.98]"
               >
-                <span className="block font-semibold">{a.username}</span>
-                <span className="block text-xs text-muted-foreground">{roleLabel[a.role]}</span>
-                <span className="block text-[11px] text-muted-foreground">{a.scope}</span>
+                <span className="block font-bold text-slate-900">{a.username}</span>
+                <span className="block text-xs font-medium text-primary">{roleLabel[a.role]}</span>
+                <span className="mt-1 block text-xs text-slate-500">{a.scope}</span>
               </button>
             ))}
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       )}
     </div>
   );

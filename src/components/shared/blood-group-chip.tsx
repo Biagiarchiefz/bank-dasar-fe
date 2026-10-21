@@ -27,7 +27,7 @@ export function BloodGroupChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center justify-center rounded-md border border-red-200 bg-red-50 font-extrabold tracking-tight text-red-800",
+        "inline-flex items-center justify-center rounded-lg border border-red-200 bg-red-50 font-extrabold tracking-tight text-red-800",
         rh === "NEG" && "border-red-300 bg-white",
         sizes[size],
         className,

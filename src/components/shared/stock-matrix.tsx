@@ -35,7 +35,7 @@ export function StockMatrix({
 
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[640px] border-separate border-spacing-1 text-center">
+      <table className="w-full min-w-[640px] border-separate border-spacing-1.5 text-center">
         <thead>
           <tr>
             <th className="w-40 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">Komponen</th>
@@ -72,7 +72,7 @@ export function StockMatrix({
                             type="button"
                             onClick={onCellClick ? () => onCellClick(comp, abo, rh) : undefined}
                             className={cn(
-                              "h-11 w-full rounded-md text-lg font-bold tabular-nums transition-colors",
+                              "h-12 w-full rounded-xl text-lg font-bold tabular-nums transition-colors",
                               n === 0
                                 ? "bg-red-100 text-red-800 ring-1 ring-red-300"
                                 : low

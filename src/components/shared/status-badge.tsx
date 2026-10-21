@@ -9,8 +9,8 @@ const toneClass: Record<Tone, string> = {
   purple: "bg-violet-100 text-violet-800 border-violet-200",
   blue: "bg-sky-100 text-sky-800 border-sky-200",
   indigo: "bg-indigo-100 text-indigo-800 border-indigo-200",
-  darkgray: "bg-zinc-700 text-zinc-50 border-zinc-700",
-  gray: "bg-zinc-100 text-zinc-600 border-zinc-200",
+  darkgray: "bg-slate-700 text-slate-50 border-slate-700",
+  gray: "bg-slate-100 text-slate-600 border-slate-200",
   redOutline: "bg-white text-red-700 border-red-400",
 };
 
@@ -26,7 +26,7 @@ export function Pill({ tone, label, className }: { tone: Tone; label: string; cl
   return (
     <span
       className={cn(
-        "inline-flex items-center whitespace-nowrap rounded-full border px-2 py-0.5 text-xs font-medium",
+        "inline-flex items-center whitespace-nowrap rounded-full border px-2.5 py-0.5 text-xs font-semibold",
         toneClass[tone],
         className,
       )}

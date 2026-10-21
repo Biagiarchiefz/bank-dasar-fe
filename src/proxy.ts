@@ -6,13 +6,16 @@ import { NextResponse, type NextRequest } from "next/server";
 
 const SESSION_COOKIE = "utd_session";
 
+// Open without a session: the landing page and the login page.
+const PUBLIC_PATHS = new Set(["/", "/login"]);
+
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const hasSession = request.cookies.has(SESSION_COOKIE);
 
-  if (!hasSession && pathname !== "/login") {
+  if (!hasSession && !PUBLIC_PATHS.has(pathname)) {
     const url = new URL("/login", request.url);
-    if (pathname !== "/") url.searchParams.set("next", pathname + search);
+    if (pathname !== "/app") url.searchParams.set("next", pathname + search);
     return NextResponse.redirect(url);
   }
   return NextResponse.next();

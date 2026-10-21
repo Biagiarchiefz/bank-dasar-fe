@@ -5,11 +5,11 @@ import { StatusBadge } from "./status-badge";
 
 const eventDot: Record<string, string> = {
   REJECTED: "bg-red-600",
-  DISCARDED: "bg-zinc-500",
+  DISCARDED: "bg-slate-500",
   TRANSFER_REJECTED: "bg-red-600",
   REACTION_REPORTED: "bg-red-600",
   RELEASED: "bg-emerald-600",
-  TRANSFUSED: "bg-zinc-800",
+  TRANSFUSED: "bg-slate-800",
 };
 
 /** Vertical timeline of product events, oldest first. */
