@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { DonationView } from "./donation-view";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { DonationView } from "@/features/collection";
 
 export const metadata: Metadata = { title: "Donasi" };
 

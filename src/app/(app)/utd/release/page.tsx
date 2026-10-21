@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { ReleaseWorklist } from "./release-worklist";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { ReleaseWorklist } from "@/features/release";
 
 export const metadata: Metadata = { title: "Pelulusan" };
 

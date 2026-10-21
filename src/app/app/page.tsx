@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { HomeRedirect } from "./home-redirect";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { HomeRedirect } from "@/features/auth";
 
 export const metadata: Metadata = { title: "Membuka aplikasi" };
 

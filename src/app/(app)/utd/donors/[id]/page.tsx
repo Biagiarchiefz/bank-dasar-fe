@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { DonorProfile } from "./donor-profile";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { DonorProfile } from "@/features/donors";
 
 export const metadata: Metadata = { title: "Profil Pendonor" };
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { DonorList } from "./donor-list";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { DonorList } from "@/features/donors";
 
 export const metadata: Metadata = { title: "Pendonor" };
 

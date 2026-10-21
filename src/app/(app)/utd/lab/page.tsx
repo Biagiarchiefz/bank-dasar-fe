@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { LabWorklist } from "./lab-worklist";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { LabWorklist } from "@/features/lab";
 
 export const metadata: Metadata = { title: "Laboratorium" };
 

@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { AppShell } from "@/components/layout/app-shell";
-import { PageSkeleton } from "@/components/shared/loading";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { SessionGate } from "@/features/auth";
 
 // Authenticated area: sidebar + header around every page.
 export default function AppLayout({ children }: LayoutProps<"/">) {
@@ -12,7 +12,7 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
         </div>
       }
     >
-      <AppShell>{children}</AppShell>
+      <SessionGate>{children}</SessionGate>
     </Suspense>
   );
 }

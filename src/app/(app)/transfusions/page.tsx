@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { TransfusionWorklistView } from "./transfusion-worklist";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { TransfusionWorklistView } from "@/features/transfusions";
 
 export const metadata: Metadata = { title: "Transfusi" };
 

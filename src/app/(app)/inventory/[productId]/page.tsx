@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { ProductDetailView } from "./product-detail";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { ProductDetailView } from "@/features/inventory";
 
 export const metadata: Metadata = { title: "Detail Kantong" };
 

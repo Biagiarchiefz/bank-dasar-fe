@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { LabResultForm } from "./lab-result-form";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { LabResultForm } from "@/features/lab";
 
 export const metadata: Metadata = { title: "Hasil Laboratorium" };
 

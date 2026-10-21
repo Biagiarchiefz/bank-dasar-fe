@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { NewTransfer } from "./new-transfer";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { NewTransfer } from "@/features/transfers";
 
 export const metadata: Metadata = { title: "Buat Kiriman" };
 

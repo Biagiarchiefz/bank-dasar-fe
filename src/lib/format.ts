@@ -1,7 +1,7 @@
 // Display helpers: dates in WIB, blood groups and Indonesian status labels.
 // Every label shown in the UI comes from here so wording stays consistent.
 
-import type { ABO, Rh } from "./types";
+import type { ABO, Rh } from "@/types";
 
 const TZ = "Asia/Jakarta";
 
@@ -238,6 +238,13 @@ export const roleLabel: Record<string, string> = {
   PETUGAS_BDRS: "Petugas BDRS",
   PERAWAT: "Perawat",
   PIMPINAN: "Pimpinan",
+};
+
+export const accountStatus: Record<string, StatusDef> = {
+  ACTIVE: { label: "Aktif", tone: "green" },
+  PENDING: { label: "Belum ganti password", tone: "amber" },
+  LOCKED: { label: "Terkunci", tone: "red" },
+  INACTIVE: { label: "Nonaktif", tone: "gray" },
 };
 
 export const eventLabel: Record<string, string> = {

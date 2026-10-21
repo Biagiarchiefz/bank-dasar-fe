@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { PageSkeleton } from "@/components/shared/loading";
-import { InventoryView } from "./inventory-view";
+import { PageSkeleton } from "@/components/feedback/loading";
+import { InventoryView } from "@/features/inventory";
 
 export const metadata: Metadata = { title: "Stok Darah" };
 
