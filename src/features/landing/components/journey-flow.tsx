@@ -1,16 +1,22 @@
 "use client";
 
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight } from "lucide-react";
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "motion/react";
+import Image, { type StaticImageData } from "next/image";
 import { useRef, useState, useSyncExternalStore } from "react";
 import { cn } from "@/lib/utils";
 import { journey } from "../content";
-import { CollectionArt, DeliveryArt, LabArt, ProcessingArt, ScreeningArt, TransfusionArt } from "./line-art";
+import collectionPhoto from "../photos/journey-collection.jpg";
+import deliveryPhoto from "../photos/journey-delivery.jpg";
+import labPhoto from "../photos/journey-lab-test.jpg";
+import processingPhoto from "../photos/journey-processing.jpg";
+import screeningPhoto from "../photos/journey-screening.jpg";
+import transfusionPhoto from "../photos/journey-transfusion.jpg";
 import { NavButton } from "./nav-button";
 
 // "Alur kantong": follow one bag through six steps. From lg up the stage is
 // pinned and scrolling picks the active step; below lg, pills and arrow
-// buttons do. The mock screens use sample values and are decorative.
+// buttons do. The right panel shows a photo of the step with its description.
 
 const LG = "(min-width: 1024px)";
 const subscribeLg = (cb: () => void) => {
@@ -19,8 +25,17 @@ const subscribeLg = (cb: () => void) => {
   return () => mq.removeEventListener("change", cb);
 };
 
-const tints = ["bg-amber-100", "bg-rose-100", "bg-sky-100", "bg-emerald-100", "bg-indigo-100", "bg-teal-100"];
-const arts = [ScreeningArt, CollectionArt, LabArt, ProcessingArt, DeliveryArt, TransfusionArt];
+// Unsplash License. Credits: CDC (BOXjKwMCsRM), Nguyễn Hiệp (2rNHliX6XHk),
+// Amari Shutters (Vw2O5QkDJQo), Nathan Rimoux (WoQRCmXdR0I), Jonnica Hill
+// (V5nq6u-Ce_U), Judy Beth Morris (UF-wfL1A2x8).
+const photos: { src: StaticImageData; alt: string; position: string }[] = [
+  { src: screeningPhoto, alt: "Petugas memeriksa tekanan darah calon pendonor", position: "50% 22%" },
+  { src: collectionPhoto, alt: "Petugas bersarung tangan mengambil darah dari lengan pendonor", position: "55% 50%" },
+  { src: labPhoto, alt: "Analis laboratorium memegang tabung sampel darah", position: "50% 40%" },
+  { src: processingPhoto, alt: "Centrifuge laboratorium yang sedang dibuka", position: "50% 45%" },
+  { src: deliveryPhoto, alt: "Ambulans melaju di jalan kota", position: "60% 50%" },
+  { src: transfusionPhoto, alt: "Selang infus terpasang di tangan pasien", position: "50% 50%" },
+];
 
 export function JourneyFlow() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -53,7 +68,6 @@ export function JourneyFlow() {
   }
 
   const step = journey[active];
-  const Art = arts[active];
 
   return (
     <section id="alur" className="scroll-mt-20 bg-[#FDFBF7]">
@@ -142,46 +156,86 @@ export function JourneyFlow() {
               ))}
             </div>
 
-            {/* Illustration of the active step */}
+            {/* Photo of the active step with its description on top */}
             <div className="lg:col-span-7">
-              <div
-                className={cn(
-                  "relative flex h-[26rem] items-center justify-center overflow-hidden rounded-3xl px-6 pt-14 pb-14 shadow-lg shadow-stone-200/50 transition-colors duration-500 sm:px-8",
-                  tints[active],
-                )}
-              >
-                <p className="absolute top-5 left-6 text-sm font-semibold text-slate-700">
+              <div className="relative h-[26rem] overflow-hidden rounded-3xl bg-slate-800 shadow-lg shadow-stone-200/50">
+                {/* All six photos stay mounted (so they load together as the section
+                    nears the viewport) and cross-fade; only the active one is visible. */}
+                {photos.map((p, i) => (
+                  <motion.div
+                    key={p.alt}
+                    initial={false}
+                    animate={{ opacity: i === active ? 1 : 0, scale: i === active || reduce ? 1 : 1.05 }}
+                    transition={{ duration: reduce ? 0 : 0.5, ease: "easeOut" }}
+                    className="absolute inset-0"
+                    aria-hidden={i !== active}
+                  >
+                    <Image
+                      src={p.src}
+                      alt={i === active ? p.alt : ""}
+                      fill
+                      placeholder="blur"
+                      sizes="(min-width: 1280px) 700px, (min-width: 1024px) 55vw, 100vw"
+                      className="object-cover"
+                      style={{ objectPosition: p.position }}
+                    />
+                  </motion.div>
+                ))}
+                <div
+                  className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-900/45 to-slate-900/5"
+                  aria-hidden
+                />
+
+                <p className="absolute top-5 left-5 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-slate-800 backdrop-blur-sm sm:left-6">
                   Tahap {active + 1} dari {journey.length}
                 </p>
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.div
-                    key={active}
-                    initial={{ opacity: 0, y: reduce ? 0 : 18 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: reduce ? 0 : -18 }}
-                    transition={{ duration: 0.25, ease: "easeOut" }}
-                    className="flex h-full w-full items-center justify-center"
-                  >
-                    <Art className="h-full max-h-64 w-full max-w-md text-slate-900" />
-                  </motion.div>
-                </AnimatePresence>
-                {/* the bag's trail so far */}
-                <div className="absolute inset-x-6 bottom-6 flex items-center sm:inset-x-8" aria-hidden>
-                  {journey.map((s, i) => (
-                    <span key={s.title} className="flex flex-1 items-center last:flex-none">
-                      <span className={cn("size-2.5 rounded-full", i <= active ? "bg-primary" : "bg-white")} />
-                      {i < journey.length - 1 && (
-                        <span className={cn("h-0.5 flex-1", i < active ? "bg-primary" : "bg-white")} />
-                      )}
-                    </span>
-                  ))}
+
+                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-7">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.div
+                      key={active}
+                      initial={{ opacity: 0, y: reduce ? 0 : 12 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: reduce ? 0 : -8 }}
+                      transition={{ duration: 0.25, ease: "easeOut" }}
+                    >
+                      <h3 className="text-2xl font-extrabold tracking-[-0.02em] text-white sm:text-3xl">{step.title}</h3>
+                      <p className="mt-2 max-w-md text-sm text-white/85 sm:text-base">{step.body}</p>
+                      <p className="mt-4 text-[11px] font-bold tracking-[0.12em] text-white/70 uppercase">Tercatat</p>
+                      <ul className="mt-2 flex flex-wrap gap-2">
+                        {step.recorded.map((r) => (
+                          <li
+                            key={r}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold text-white ring-1 ring-white/25 backdrop-blur-sm"
+                          >
+                            <Check className="size-3.5" aria-hidden />
+                            {r}
+                          </li>
+                        ))}
+                      </ul>
+                    </motion.div>
+                  </AnimatePresence>
+
+                  {/* the bag's trail so far */}
+                  <div className="mt-5 flex items-center" aria-hidden>
+                    {journey.map((s, i) => (
+                      <span key={s.title} className="flex flex-1 items-center last:flex-none">
+                        <span
+                          className={cn("size-2.5 rounded-full transition-colors", i <= active ? "bg-primary" : "bg-white/40")}
+                        />
+                        {i < journey.length - 1 && (
+                          <span
+                            className={cn("h-0.5 flex-1 transition-colors", i < active ? "bg-primary" : "bg-white/30")}
+                          />
+                        )}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </div>
 
               <div className="mt-6 lg:hidden">
-                <h3 className="text-2xl font-extrabold tracking-[-0.02em] text-slate-900">{step.title}</h3>
-                <p className="mt-2 text-slate-600">{step.body}</p>
-                <div className="mt-6 flex justify-end gap-3 border-t border-stone-200 pt-6">
+                <div className="flex justify-end gap-3">
                   <NavButton label="Tahap sebelumnya" disabled={active === 0} onClick={() => goTo(active - 1)}>
                     <ChevronLeft />
                   </NavButton>

@@ -19,13 +19,38 @@ export const stats: Stat[] = [
   { value: "6", unit: "peran", label: "pengguna, masing-masing dengan menu dan hak akses sendiri", tone: "orange" },
 ];
 
+/** `recorded`: what the app stores at that step (shown on the journey photo). */
 export const journey = [
-  { title: "Seleksi donor", body: "Registrasi pendonor, kuesioner, dan pemeriksaan kelayakan." },
-  { title: "Pengambilan", body: "Darah diambil dan kantong mendapat nomor unik ber-barcode." },
-  { title: "Uji saring", body: "Laboratorium mencatat golongan darah dan hasil IMLTD." },
-  { title: "Pengolahan & pelulusan", body: "Darah dipisah menjadi komponen lalu diluluskan ke stok." },
-  { title: "Distribusi", body: "Kantong dikirim dari UTD ke BDRS rumah sakit." },
-  { title: "Transfusi", body: "Kantong diberikan ke pasien dan dipantau sampai selesai." },
+  {
+    title: "Seleksi donor",
+    body: "Registrasi pendonor, kuesioner, dan pemeriksaan kelayakan.",
+    recorded: ["Kuesioner", "Tanda vital & Hb", "Layak / tunda"],
+  },
+  {
+    title: "Pengambilan",
+    body: "Darah diambil dan kantong mendapat nomor unik ber-barcode.",
+    recorded: ["Nomor kantong", "Jenis kantong", "Volume"],
+  },
+  {
+    title: "Uji saring",
+    body: "Laboratorium mencatat golongan darah dan hasil IMLTD.",
+    recorded: ["HIV · HBV · HCV · Sifilis", "ABO/Rh", "Validator"],
+  },
+  {
+    title: "Pengolahan & pelulusan",
+    body: "Darah dipisah menjadi komponen lalu diluluskan ke stok.",
+    recorded: ["Batch", "PRC · FFP · TC", "Checklist pelulusan"],
+  },
+  {
+    title: "Distribusi",
+    body: "Kantong dikirim dari UTD ke BDRS rumah sakit.",
+    recorded: ["Kurir", "Suhu kemas & tiba", "Diterima per kantong"],
+  },
+  {
+    title: "Transfusi",
+    body: "Kantong diberikan ke pasien dan dipantau sampai selesai.",
+    recorded: ["Verifikasi bedside", "Observasi", "Reaksi"],
+  },
 ];
 
 export type RoleStory = { role: Role; title: string; headline: string; body: string; points: string[] };

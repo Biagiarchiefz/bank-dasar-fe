@@ -76,57 +76,11 @@ export function BagArt({ className = base }: { className?: string }) {
   );
 }
 
-/* One illustration per step of the bag journey ("Alur kantong"). */
+/* Lab and bedside-transfusion scenes (used by the login page benefit cards). */
 
 const HEART = "M0 30 C-60 -10 -50 -60 -18 -60 C-6 -60 0 -50 0 -42 C0 -50 6 -60 18 -60 C50 -60 60 -10 0 30 Z";
 
 type ArtProps = { className?: string };
-
-export function ScreeningArt({ className = base }: ArtProps) {
-  return (
-    <svg viewBox="0 0 200 140" className={className} fill="none" aria-hidden>
-      <g stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <rect x="60" y="22" width="80" height="108" rx="12" className="fill-white" />
-        <rect x="82" y="14" width="36" height="16" rx="6" className="fill-amber-50" />
-        {[52, 76, 100].map((y) => (
-          <g key={y}>
-            <path d={`M72 ${y} l5 5 l9 -10`} className="stroke-emerald-600" />
-            <path d={`M94 ${y} h32`} />
-          </g>
-        ))}
-        <path d={HEART} transform="translate(166 56) scale(0.3)" className="fill-primary stroke-primary" />
-        <path d="M146 90 h8 l5 -10 l6 18 l5 -8 h12" className="stroke-primary" />
-        <circle cx="32" cy="90" r="18" className="fill-white" />
-        <path d="M32 90 l9 -8 M20 98 h24" />
-        <path d="M30 28 v10 M25 33 h10" />
-        <circle cx="178" cy="122" r="3" />
-      </g>
-    </svg>
-  );
-}
-
-export function CollectionArt({ className = base }: ArtProps) {
-  return (
-    <svg viewBox="0 0 200 140" className={className} fill="none" aria-hidden>
-      <g stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M104 26 C104 6 58 6 44 32 L38 59" />
-        <path d="M38 66 l-3 16" strokeWidth={3} />
-        <circle cx="38" cy="63" r="4" className="fill-white" />
-        <rect x="96" y="22" width="16" height="14" rx="4" className="fill-white" />
-        <rect x="74" y="34" width="60" height="88" rx="18" className="fill-white" />
-        <rect x="80" y="70" width="48" height="46" rx="13" className="fill-red-500 stroke-none" />
-        <rect x="84" y="42" width="40" height="18" rx="5" className="fill-red-50 stroke-primary" />
-        <text x="104" y="55" textAnchor="middle" className="fill-primary stroke-none text-[11px] font-extrabold">
-          O+
-        </text>
-        <path d="M88 84 v20 M93 84 v20 M97 84 v20 M103 84 v20 M107 84 v20 M113 84 v20 M118 84 v20" className="stroke-white" />
-        <path d={DROP} transform="translate(160 104) scale(0.24)" className="fill-primary stroke-primary" />
-        <path d="M164 36 v10 M159 41 h10" />
-        <circle cx="30" cy="114" r="3" />
-      </g>
-    </svg>
-  );
-}
 
 export function LabArt({ className = base }: ArtProps) {
   return (
@@ -147,53 +101,6 @@ export function LabArt({ className = base }: ArtProps) {
         <path d="M168 108 l14 14" strokeWidth={5} />
         <path d="M148 90 a9 9 0 0 1 9 -5" />
         <path d="M186 30 v10 M181 35 h10" />
-      </g>
-    </svg>
-  );
-}
-
-export function ProcessingArt({ className = base }: ArtProps) {
-  const parts = [
-    { x: 116, fill: "fill-red-600", label: "PRC" },
-    { x: 144, fill: "fill-amber-300", label: "TC" },
-    { x: 172, fill: "fill-yellow-200", label: "FFP" },
-  ];
-  return (
-    <svg viewBox="0 0 200 140" className={className} fill="none" aria-hidden>
-      <g stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <rect x="16" y="38" width="50" height="70" rx="16" className="fill-white" />
-        <rect x="22" y="58" width="38" height="44" rx="11" className="fill-red-500 stroke-none" />
-        <rect x="34" y="30" width="14" height="12" rx="4" className="fill-white" />
-        {parts.map((p) => (
-          <g key={p.label}>
-            <rect x={p.x - 11} y="56" width="22" height="36" rx="8" className={p.fill} />
-            <text x={p.x} y="108" textAnchor="middle" className="fill-current stroke-none text-[9px] font-bold">
-              {p.label}
-            </text>
-          </g>
-        ))}
-        <path d="M74 74 h22 M90 68 l6 6 l-6 6" />
-        <circle cx="176" cy="26" r="12" className="fill-white" />
-        <path d="M170 26 l4 4 l8 -8" className="stroke-emerald-600" />
-        <path d="M100 18 v10 M95 23 h10" />
-      </g>
-    </svg>
-  );
-}
-
-export function DeliveryArt({ className = base }: ArtProps) {
-  return (
-    <svg viewBox="0 0 200 140" className={className} fill="none" aria-hidden>
-      <g stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-        <path d="M6 58 h16 M2 70 h18 M10 82 h10" />
-        <rect x="30" y="40" width="92" height="56" rx="8" className="fill-white" />
-        <path d="M122 56 h28 l20 20 v20 h-48 z" className="fill-white" />
-        <path d="M130 62 h16 l12 12 h-28 z" className="fill-indigo-100" />
-        <path d={DROP} transform="translate(76 70) scale(0.32)" className="fill-primary stroke-primary" />
-        <circle cx="56" cy="100" r="11" className="fill-white" />
-        <circle cx="148" cy="100" r="11" className="fill-white" />
-        <path d="M12 122 h176" strokeDasharray="10 10" />
-        <path d="M174 30 v10 M169 35 h10" />
       </g>
     </svg>
   );
